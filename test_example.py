@@ -32,3 +32,39 @@ def test_click_products_link_and_verify_header(driver):
     actual_header_text = all_products_header.text.lower()
     expected_header_text = "All Products".lower()
     assert actual_header_text == expected_header_text, "Header text mismatch"
+
+def test_add_one_item_to_cart(driver):
+    item_name = 'Blue Top'
+    driver.get("https://www.automationexercise.com/")
+    add_one_item =  WebDriverWait(driver, 10).until(
+        # EC.visibility_of_element_located((By.XPATH, "//div[@class='productinfo text-center'][p='{}']/a[@class='btn btn-default add-to-cart']".format(item_name)))
+        EC.visibility_of_element_located((By.XPATH, "//div[@class='productinfo text-center'][p='" + item_name + "']/a[@class='btn btn-default add-to-cart']"))
+    )
+    add_one_item.click()
+    view_cart = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[@class='modal-content']//div[@class='modal-body']//a[@href='/view_cart']/u"))
+    )
+    view_cart.click()
+    find_item_in_cart = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//table[@id='cart_info_table']//tr[contains(td[@class='cart_description']//h4/a, '" + item_name + "')]"))
+    )
+    assert find_item_in_cart is not None, "Product '" + item_name + "' not found in the cart"
+
+def test_add_multiple_items_to_cart(driver):
+    items = ["Blue Top", "Men Tshirt", "Winter Top", "Stylish Dress"]
+    driver.get("https://www.automationexercise.com/")
+    
+    for item in items:
+        add_item_xpath = "//div[@class='productinfo text-center'][p='{}']/a[@class='btn btn-default add-to-cart']".format(item)
+        add_item = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, add_item_xpath)))
+        add_item.click()
+        # Assuming there's a modal, click on continue shopping
+        continue_shopping_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='modal-content']//div[@class='modal-footer']//button")))
+        continue_shopping_button.click()
+
+    view_cart = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//ul[@class='nav navbar-nav']//a[@href='/view_cart']")))
+    view_cart.click()
+
+    for item in items:
+        product_in_cart = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//table[@id='cart_info_table']//tr[contains(td[@class='cart_description']//h4/a, '" + item + "')]")))
+        assert product_in_cart is not None, "Product '" + item + "' not found in the cart"
