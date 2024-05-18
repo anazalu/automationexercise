@@ -1,0 +1,29 @@
+## New User Signup!
+user1
+userone@one.lv
+1userPassword&
+
+## Required fields
+
+name
+email
+password
+firstname
+lastname
+address1
+country
+zipcode
+state
+city
+mobile_number
+
+{"responseCode": 201, "message": "User created!"}
+{"responseCode": 400, "message": "Email already exists!"}
+
+## Delete Account
+
+email
+password
+
+{"responseCode": 200, "message": "Account deleted!"}
+{"responseCode": 404, "message": "Account not found!"}

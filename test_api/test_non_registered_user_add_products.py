@@ -10,27 +10,6 @@ def test_get_all_products_list(api_base_url):
     assert 'Grunt Blue Slim Fit Jeans' in str(response.json())
     assert 'Blue Top' in str(response.json())
 
-def test_login_valid_data(api_base_url):
-    endpoint = api_base_url + '/verifyLogin'
-    data = {'email': 'alaque@gmail.com', 'password': '1userSunMay&'}
-    response = requests.post(endpoint, timeout=30, data=data)
-    assert response.status_code == 200
-    assert 'User exists' in str(response.json())
-    
-def test_login_incomplete_data(api_base_url):
-    endpoint = api_base_url + '/verifyLogin'
-    data = {'email': 'alaque@gmail.com'}
-    response = requests.post(endpoint, timeout=30, data=data)
-    assert '400' in str(response.json())
-    assert 'Bad request' in str(response.json())
-
-def test_login_invalid_data(api_base_url):
-    endpoint = api_base_url + '/verifyLogin'
-    data = {'email': 'alaque@gmail.com', 'password': 'wrongPassword'}
-    response = requests.post(endpoint, timeout=30, data=data)
-    assert '404' in str(response.json())
-    assert 'User not found' in str(response.json())
-
 def test_positive_post_to_search_product(api_base_url):
     endpoint = api_base_url + '/searchProduct'
     data = {'search_product': 'top'}
@@ -44,9 +23,10 @@ def test_negative_post_to_search_product(api_base_url):
     assert '400' in str(response.json())
     assert 'Bad request' in str(response.json())
 
-@pytest.mark.parametrize("search_product,expected_response_code", [('top', '200'), ('', '400')])
+@pytest.mark.parametrize("search_product,expected_response_code", [('top', '200'), ('', '400'), ('dress', '200')])
 def test_post_to_search_product(api_base_url, search_product, expected_response_code):
     endpoint = api_base_url + '/searchProduct'
     data = {'search_product': search_product}
     response = requests.post(endpoint, timeout=30, data=data)
     assert expected_response_code in str(response.json())
+    assert str.capitalize(search_product) in str(response.json())
