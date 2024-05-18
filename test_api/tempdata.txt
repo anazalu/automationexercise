@@ -19,6 +19,7 @@ mobile_number
 
 {"responseCode": 201, "message": "User created!"}
 {"responseCode": 400, "message": "Email already exists!"}
+{"responseCode": 400, "message": "Bad request, country parameter is missing in POST request."}
 
 ## Delete Account
 
