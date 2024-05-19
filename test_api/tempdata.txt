@@ -28,3 +28,16 @@ password
 
 {"responseCode": 200, "message": "Account deleted!"}
 {"responseCode": 404, "message": "Account not found!"}
+
+
+"name",
+"email",
+"password",
+"firstname",
+"lastname",
+"address1",
+"country",
+"zipcode",
+"state",
+"city",
+"mobile_number"
