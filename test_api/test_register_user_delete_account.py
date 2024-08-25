@@ -40,6 +40,7 @@ def test_negative_delete_without_email(api_base_url):
     assert '400' in str(response.json())
     assert 'parameter is missing' in str(response.json())
 
+@pytest.mark.slow
 def test_register_and_delete_user_account(api_base_url, registration_data):
     endpoint = api_base_url + '/createAccount'
     response = requests.post(endpoint, timeout=30, data=registration_data)
